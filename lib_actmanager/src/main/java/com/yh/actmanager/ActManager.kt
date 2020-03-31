@@ -111,7 +111,21 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     override fun init() {
         registerActivityLifecycleCallbacks(mActStatusEvent)
     }
-    
+
+    @Synchronized
+    fun killAll() {
+        unRegisterActivityLifecycleCallbacks(mActStatusEvent)
+        mActStatusStack.forEach {
+            it.refAct.get()?.finish()
+        }
+        mActStatusStack.clear()
+    }
+
+    @Synchronized
+    fun getLastValidAct(): Activity? {
+        return mActStatusStack.findLast { null != it.refAct.get() }?.refAct?.get()
+    }
+
     @Synchronized
     private fun printAllStatus() {
         val sb = StringBuilder()
@@ -123,5 +137,4 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         sb.append("-----------[ END ] ACT STATUS-----------")
         LogW(TAG, sb.toString())
     }
-    
 }
