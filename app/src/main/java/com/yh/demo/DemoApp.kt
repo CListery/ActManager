@@ -1,6 +1,7 @@
 package com.yh.demo
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import com.yh.actmanager.ActManager
 import com.yh.appinject.IBaseAppInject
@@ -33,7 +34,10 @@ class DemoApp : Application(), IBaseAppInject {
         sApp = this
         mCtx = getApplication()
 
-        ActManager.get().register(this)
+        ActManager.get().apply {
+            loggerConfig(true to Log.VERBOSE)
+            register(this@DemoApp)
+        }
 
     }
 

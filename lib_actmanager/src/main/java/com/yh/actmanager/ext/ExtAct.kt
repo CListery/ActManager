@@ -7,3 +7,13 @@ import android.app.Activity
  */
 
 fun Activity.identifier() = System.identityHashCode(this@identifier).toString()
+
+fun Activity.killSelf() {
+    if (Thread.currentThread() == mainLooper.thread) {
+        finish()
+    } else {
+        runOnUiThread {
+            finish()
+        }
+    }
+}
