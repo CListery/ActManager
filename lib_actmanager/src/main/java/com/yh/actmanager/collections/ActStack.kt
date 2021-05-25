@@ -68,7 +68,7 @@ class ActStack : AbstractMutableCollection<ActInfo>() {
     
     private fun findLast(actInfo: ActInfo): ActInfo? {
         return mActStatusStack.filter { it.taskID == actInfo.taskID }
-                .filterNot { it.identifier == actInfo.identifier }.maxBy { it.createTime }
+                .filterNot { it.identifier == actInfo.identifier }.maxByOrNull { it.createTime }
     }
     
     private fun findTarget(target: Activity): ActInfo? {

@@ -20,8 +20,8 @@ class DemoApp : Application(), IBaseAppInject {
 
     override fun getNotificationIcon() = R.mipmap.ic_launcher
 
-    override fun showTipMsg(errorMsg: String) {
-        Toast.makeText(mCtx, errorMsg, Toast.LENGTH_SHORT).show()
+    override fun showTipMsg(msg: String) {
+        Toast.makeText(mCtx, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreate() {
