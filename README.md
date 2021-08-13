@@ -5,8 +5,8 @@
 ## Use
 
 ```gradle
-implementation("io.github.clistery:appinject:1.4.1")
-implementation("io.github.clistery:actmanager:1.2.0")
+implementation("io.github.clistery:appinject:1.4.2")
+implementation("io.github.clistery:actmanager:1.2.1")
 ```
 
 ```kotlin
@@ -23,6 +23,8 @@ class DemoApp : Application(), IBaseAppInject {
 
 - IForegroundEvent
   - APP 前/后台状态监听器
+- IActStatusEvent
+  - Activity状态监听器
 - enableForcedStackTopMode
   - 是否开启强制栈顶模式（当 APP 进入后台后会自动记录栈顶 activity，在重新打开 APP 时会自动恢复到栈顶 activity）
   - 使用情形：

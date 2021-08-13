@@ -15,6 +15,7 @@ import com.yh.appinject.IBaseAppInject
 import com.yh.appinject.InjectHelper
 import com.yh.appinject.ext.isMainProcess
 import com.yh.appinject.ext.memoryId
+import com.yh.appinject.lifecycle.IActStatusEvent
 import com.yh.appinject.logger.ext.libD
 import com.yh.appinject.logger.ext.libE
 import com.yh.appinject.logger.ext.libW
@@ -67,7 +68,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     private var mLastTaskId: Int = -1
     private var isMainProcess: Boolean = false
 
-    private val mForegroundEvents = arrayListOf<IForegroundEvent>()
+    private val events = arrayListOf<IForegroundEvent>()
 
     override fun init() {
         if (isInitialized) {
@@ -132,13 +133,32 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     }
 
     /**
-     *
+     * APP是否处于前台
+     * @return true，当前处于前台
      */
-    fun registerForegroundEvent(event: IForegroundEvent) {
-        if (mForegroundEvents.contains(event)) {
+    fun isForeground() = mInStackActCount > 0
+
+    /**
+     * 注册监听器
+     *
+     * @see [com.yh.actmanager.IActStatusEvent]
+     * @see [com.yh.actmanager.IForegroundEvent]
+     */
+    fun registerEvent(event: IForegroundEvent) {
+        if (events.contains(event)) {
             return
         }
-        mForegroundEvents.add(event)
+        events.add(event)
+    }
+
+    /**
+     * 注销监听器
+     *
+     * @see [com.yh.actmanager.IActStatusEvent]
+     * @see [com.yh.actmanager.IForegroundEvent]
+     */
+    fun unregisterEvent(event: IForegroundEvent) {
+        events.remove(event)
     }
 
     /**
@@ -378,6 +398,9 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     private val callback = object : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             updateAct(activity, ActStatus.CREATED)
+            events.filterIsInstance<IActStatusEvent>().forEach {
+                it.onCreate(activity)
+            }
         }
 
         override fun onActivityStarted(activity: Activity) {
@@ -386,10 +409,16 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
 
         override fun onActivityResumed(activity: Activity) {
             updateAct(activity, ActStatus.RESUMED)
+            events.filterIsInstance<IActStatusEvent>().forEach {
+                it.onShow(activity)
+            }
         }
 
         override fun onActivityPaused(activity: Activity) {
             updateAct(activity, ActStatus.PAUSED)
+            events.filterIsInstance<IActStatusEvent>().forEach {
+                it.onHide(activity)
+            }
         }
 
         override fun onActivityStopped(activity: Activity) {
@@ -402,6 +431,9 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
 
         override fun onActivityDestroyed(activity: Activity) {
             updateAct(activity, ActStatus.DESTROYED)
+            events.filterIsInstance<IActStatusEvent>().forEach {
+                it.onDestroyed(activity)
+            }
         }
     }
 
@@ -421,7 +453,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                     val topActInfo = activityStack.topActInfo
                     libD("enter FG: ${topActInfo?.tag} $isForcedStackTopMode $mLastTaskId")
                     thread {
-                        mForegroundEvents.toList().forEach {
+                        events.toList().forEach {
                             it.onForegroundStateChange(true)
                         }
                     }
@@ -445,7 +477,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                     val topActInfo = activityStack.topActInfo
                     libD("enter BG: ${topActInfo?.tag} $isForcedStackTopMode $mLastTaskId")
                     thread {
-                        mForegroundEvents.toList().forEach {
+                        events.toList().forEach {
                             it.onForegroundStateChange(false)
                         }
                     }

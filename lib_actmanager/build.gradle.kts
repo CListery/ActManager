@@ -40,7 +40,6 @@ android {
 dependencies {
     implementation(AppDependencies.baseLibs)
     implementation(AppDependencies.clistery.appinject)
-    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.0.0")
 }
 
 val androidJavadocs by tasks.register<Javadoc>("androidJavadocs") {
