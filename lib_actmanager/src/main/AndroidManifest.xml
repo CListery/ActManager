@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yh.actmanager" />
+    package="com.yh.actmanager">
+
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+
+    <permission
+        android:name="com.yh.actmanager.permissions.act_process"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.yh.actmanager.permissions.act_process" />
+
+</manifest>

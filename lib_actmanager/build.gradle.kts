@@ -7,7 +7,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-parcelize")
     id("org.jetbrains.dokka")
-    `maven-publish`
+    id("kre-publish")
 }
 
 android {
@@ -39,7 +39,8 @@ android {
 
 dependencies {
     implementation(AppDependencies.baseLibs)
-    compileOnly(AppDependencies.clistery.appinject)
+    implementation(AppDependencies.clistery.appinject)
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.0.0")
 }
 
 val androidJavadocs by tasks.register<Javadoc>("androidJavadocs") {
@@ -86,47 +87,16 @@ val androidSourcesJar by tasks.register<Jar>("androidSourcesJar") {
     archiveClassifier.set("sources")
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "_ProjectMaven_"
-            url = uri(extra.get("PROJECT_LOCAL_MAVEN_PATH")?.toString()!!)
-        }
-        maven {
-            name = "_jfrog.fx_"
-            url = uri(extra.get("MAVEN_REPOSITORY_URL")?.toString()!!)
-            credentials {
-                username = extra.get("artifactory_maven_user")?.toString()!!
-                password = extra.get("artifactory_maven_pwd")?.toString()!!
-            }
-        }
-    }
+publishing{
     publications {
-        create<MavenPublication>("-Release") {
+        maybeCreate<MavenPublication>("-Release").apply {
             groupId = AppConfig.GROUP_ID
             artifactId = AppConfig.ARTIFACT_ID
             version = AppConfig.versionName
 
             suppressAllPomMetadataWarnings()
-            pom {
-                name.set(rootProject.name)
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("cyh")
-                        name.set("CListery")
-                        email.set("cai1083088795@gmail.com")
-                    }
-                }
-            }
 
             artifact(dokkaJavadocJar)
-            artifact(dokkaHtmlJar)
             artifact(androidSourcesJar)
             afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
         }

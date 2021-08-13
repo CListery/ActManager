@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.SecAct" />
-        <activity android:name=".ui.ThirdAct" />
+        <activity
+            android:name=".ui.ThirdAct"
+            android:process=":third" />
     </application>
 </manifest>
