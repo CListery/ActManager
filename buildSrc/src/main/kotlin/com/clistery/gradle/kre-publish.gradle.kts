@@ -70,6 +70,7 @@ publishing {
         maven {
             name = "_jfrog.fx_"
             url = uri(extra.get("MAVEN_REPOSITORY_URL")?.toString()!!)
+            isAllowInsecureProtocol = true
             credentials {
                 username = extra.get("artifactory_maven_user")?.toString()!!
                 password = extra.get("artifactory_maven_pwd")?.toString()!!

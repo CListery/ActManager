@@ -15,7 +15,6 @@ import com.yh.appinject.IBaseAppInject
 import com.yh.appinject.InjectHelper
 import com.yh.appinject.ext.isMainProcess
 import com.yh.appinject.ext.memoryId
-import com.yh.appinject.lifecycle.IActStatusEvent
 import com.yh.appinject.logger.ext.libD
 import com.yh.appinject.logger.ext.libE
 import com.yh.appinject.logger.ext.libW
