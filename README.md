@@ -5,8 +5,8 @@
 ## Use
 
 ```gradle
-implementation("io.github.clistery:appinject:1.4.2")
-implementation("io.github.clistery:actmanager:1.2.1")
+implementation("io.github.clistery:appinject:1.4.3")
+implementation("io.github.clistery:actmanager:1.2.2")
 ```
 
 ```kotlin
