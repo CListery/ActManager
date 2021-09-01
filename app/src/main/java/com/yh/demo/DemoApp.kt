@@ -9,7 +9,6 @@ import android.widget.Toast
 import com.yh.actmanager.ActManager
 import com.yh.actmanager.IForegroundEvent
 import com.yh.appinject.IBaseAppInject
-import com.yh.appinject.ext.isMainProcess
 
 /**
  * Created by CYH on 2020-03-16 15:54
@@ -33,7 +32,7 @@ class DemoApp : Application(), IBaseAppInject, IForegroundEvent {
         ActManager.get().apply {
             loggerConfig(true to Log.VERBOSE)
             register(this@DemoApp)
-            registerForegroundEvent(this@DemoApp)
+            registerEvent(this@DemoApp)
         }
         StrictMode.setThreadPolicy(
             StrictMode.ThreadPolicy.Builder()
