@@ -25,6 +25,8 @@ android {
         targetSdkVersion(AppConfig.targetSdk)
         versionCode(AppConfig.versionCode)
         versionName(AppConfig.versionName)
+
+        manifestPlaceholders["APPLICATION_ID"] = applicationId.toString()
     }
     buildTypes {
         getByName("release") {

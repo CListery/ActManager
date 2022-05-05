@@ -33,7 +33,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         fun get() = mInstances
 
         /**********************************PERMISSIONS********************************************/
-        private const val BROADCAST_PERMISSIONS = "com.yh.actmanager.permissions.act_process"
+        private val BROADCAST_PERMISSIONS by lazy { "${get().ctx().packageName}.permissions.act_process" }
 
         /**********************************ACTION*************************************************/
         // 关闭所有 activity
