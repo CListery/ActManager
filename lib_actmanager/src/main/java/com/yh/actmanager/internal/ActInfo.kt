@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Process
 import com.yh.actmanager.ext.isInvalid
-import com.yh.appinject.ext.memoryId
+import com.yh.appbasic.ext.memoryId
 import java.lang.ref.WeakReference
 
 /**

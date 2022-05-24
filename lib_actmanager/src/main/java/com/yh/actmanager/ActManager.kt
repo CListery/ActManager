@@ -13,11 +13,11 @@ import androidx.core.content.getSystemService
 import com.yh.actmanager.internal.*
 import com.yh.appinject.IBaseAppInject
 import com.yh.appinject.InjectHelper
-import com.yh.appinject.ext.isMainProcess
-import com.yh.appinject.ext.memoryId
-import com.yh.appinject.logger.ext.libD
-import com.yh.appinject.logger.ext.libE
-import com.yh.appinject.logger.ext.libW
+import com.yh.appbasic.ext.isMainProcess
+import com.yh.appbasic.ext.memoryId
+import com.yh.appbasic.logger.ext.libD
+import com.yh.appbasic.logger.ext.libE
+import com.yh.appbasic.logger.ext.libW
 import kotlin.concurrent.thread
 
 /**

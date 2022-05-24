@@ -2,7 +2,7 @@ package com.yh.actmanager.ext
 
 import android.app.Activity
 import android.graphics.Rect
-import com.yh.appinject.logger.LibLogs
+import com.yh.appbasic.logger.LibLogs
 
 /**
  * 检查activity是否有效

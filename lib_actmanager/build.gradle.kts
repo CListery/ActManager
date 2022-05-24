@@ -39,6 +39,7 @@ android {
 
 dependencies {
     implementation(AppDependencies.baseLibs)
+    implementation(AppDependencies.clistery.appbasic)
     implementation(AppDependencies.clistery.appinject)
 }
 

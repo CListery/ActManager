@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import com.yh.actmanager.ActManager
-import com.yh.appinject.ext.memoryId
-import com.yh.appinject.logger.ext.libD
+import com.yh.appbasic.ext.memoryId
+import com.yh.appbasic.logger.ext.libD
 
 internal class ActivityStack {
 
