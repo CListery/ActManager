@@ -4,25 +4,25 @@
     <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <permission
-        android:name="${APPLICATION_ID}.permissions.act_process"
+        android:name="${applicationId}.permissions.act_process"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="${APPLICATION_ID}.permissions.act_process" />
+    <uses-permission android:name="${applicationId}.permissions.act_process" />
 
-    <application>
-        <service
-            android:name=".internal.ActStateRecService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="${APPLICATION_ID}.action.ACT_STATE_MESSENGER" />
-            </intent-filter>
-        </service>
-        <service android:name=".internal.module.MainProcessModule$MainService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="${APPLICATION_ID}.action.MAIN_PROCESS" />
-            </intent-filter>
-        </service>
-    </application>
+<!--    <application>-->
+<!--        <service-->
+<!--            android:name=".internal.ActStateRecService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="${applicationId}.action.ACT_STATE_MESSENGER" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
+<!--        <service android:name=".internal.module.MainProcessModule$MainService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="${applicationId}.action.MAIN_PROCESS" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
+<!--    </application>-->
 
 </manifest>

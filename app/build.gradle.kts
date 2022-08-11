@@ -25,8 +25,6 @@ android {
         targetSdkVersion(AppConfig.targetSdk)
         versionCode(AppConfig.versionCode)
         versionName(AppConfig.versionName)
-
-        manifestPlaceholders["APPLICATION_ID"] = applicationId.toString()
     }
     buildTypes {
         getByName("release") {
@@ -39,6 +37,7 @@ dependencies {
     implementation(AppDependencies.baseLibs)
     implementation(AppDependencies.androidx.appcompat)
     implementation(AppDependencies.google.material)
+    implementation(AppDependencies.clistery.appbasic)
     implementation(AppDependencies.clistery.appinject)
     implementation(project(mapOf("path" to ":lib_actmanager")))
     // leakcanary
