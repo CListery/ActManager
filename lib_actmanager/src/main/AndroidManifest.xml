@@ -9,20 +9,4 @@
 
     <uses-permission android:name="${applicationId}.permissions.act_process" />
 
-<!--    <application>-->
-<!--        <service-->
-<!--            android:name=".internal.ActStateRecService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="${applicationId}.action.ACT_STATE_MESSENGER" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-<!--        <service android:name=".internal.module.MainProcessModule$MainService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="${applicationId}.action.MAIN_PROCESS" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-<!--    </application>-->
-
 </manifest>

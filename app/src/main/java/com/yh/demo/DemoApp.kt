@@ -8,6 +8,8 @@ import android.util.Log
 import android.widget.Toast
 import com.yh.actmanager.ActManager
 import com.yh.actmanager.IForegroundEvent
+import com.yh.appbasic.logger.logOwner
+import com.yh.appbasic.share.AppBasicShare
 import com.yh.appinject.IBaseAppInject
 
 /**
@@ -15,8 +17,6 @@ import com.yh.appinject.IBaseAppInject
  */
 class DemoApp : Application(), IBaseAppInject, IForegroundEvent {
     private var mCtx: Application? = null
-
-    override fun getApplication() = this
 
     override fun getNotificationIcon() = R.mipmap.ic_launcher
 
@@ -27,10 +27,12 @@ class DemoApp : Application(), IBaseAppInject, IForegroundEvent {
     override fun onCreate() {
         super.onCreate()
 
-        mCtx = getApplication()
+        AppBasicShare.install(this)
+
+        mCtx = this
 
         ActManager.get().apply {
-            loggerConfig(true to Log.VERBOSE)
+            logOwner.on()
             register(this@DemoApp)
             registerEvent(this@DemoApp)
         }

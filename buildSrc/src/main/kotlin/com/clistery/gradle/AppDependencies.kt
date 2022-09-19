@@ -14,17 +14,7 @@ object AppDependencies {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${AppVersion.kotlin.version}"
         const val plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${AppVersion.kotlin.version}"
     }
-    
-    object dokka {
-        
-        const val plugin = "org.jetbrains.dokka:dokka-gradle-plugin:${AppVersion.dokka.version}"
-    }
-    
-    object jfrog {
-        
-        const val buildInfo = "org.jfrog.buildinfo:build-info-extractor-gradle:4.23.4"
-    }
-    
+
     object androidx {
         
         const val coreKtx = "androidx.core:core-ktx:${AppVersion.androidx.coreKtx}"
@@ -43,10 +33,4 @@ object AppDependencies {
             androidx.appcompat
         )
     
-}
-
-fun DependencyHandler.implementation(list: List<String>) {
-    list.forEach { dependency ->
-        add("implementation", dependency)
-    }
 }

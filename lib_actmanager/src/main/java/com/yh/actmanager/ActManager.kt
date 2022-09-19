@@ -3,27 +3,22 @@ package com.yh.actmanager
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.getSystemService
+import com.kotlin.memoryId
 import com.yh.actmanager.internal.*
+import com.yh.appbasic.share.AppBasicShare
+import com.yh.appbasic.logger.*
 import com.yh.appinject.IBaseAppInject
 import com.yh.appinject.InjectHelper
-import com.yh.appbasic.ext.isMainProcess
-import com.yh.appbasic.ext.memoryId
-import com.yh.appbasic.logger.ext.libD
-import com.yh.appbasic.logger.ext.libE
-import com.yh.appbasic.logger.ext.libW
 import kotlin.concurrent.thread
 
 /**
  * Created by CYH on 2020-03-13 16:35
  */
-class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
+class ActManager private constructor() : InjectHelper<IBaseAppInject>(), ILogger {
 
     companion object {
         @JvmStatic
@@ -33,7 +28,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         fun get() = mInstances
 
         /**********************************PERMISSIONS********************************************/
-        private val BROADCAST_PERMISSIONS by lazy { "${get().ctx().packageName}.permissions.act_process" }
+        private val BROADCAST_PERMISSIONS by lazy { "${AppBasicShare.context.packageName}.permissions.act_process" }
 
         /**********************************ACTION*************************************************/
         // 关闭所有 activity
@@ -56,8 +51,8 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         private const val CATEGORY_OTHER_PROCESS = "category_other_process"
     }
 
-    private val sysActMgr: ActivityManager? by lazy { ctx().getSystemService() }
-    private val sysPkgMgr: PackageManager? by lazy { ctx().packageManager }
+    private val sysActMgr: ActivityManager? by lazy { AppBasicShare.context.getSystemService() }
+    private val sysPkgMgr: PackageManager? by lazy { AppBasicShare.context.packageManager }
 
     private var isInitialized = false
 
@@ -69,12 +64,16 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
 
     private val events = arrayListOf<IForegroundEvent>()
 
+    override fun onCreateLogOwner(logOwner: LogOwner) {
+        
+    }
+
     override fun init() {
         if (isInitialized) {
             return
         }
         isInitialized = true
-        isMainProcess = ctx().isMainProcess()
+        isMainProcess = AppBasicShare.context.isMainProcess()
         if (isMainProcess) {
             registerProcessReceiver(
                 listOf(
@@ -95,12 +94,12 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                 ),
                 listOf(
                     CATEGORY_OTHER_PROCESS,
-                    getProcessCategory(mProcessID)
+                    getProcessCategory(AppBasicShare.pid)
                 )
             )
         }
         loadActivityInfo()
-        getInject().getApplication().registerActivityLifecycleCallbacks(callback)
+        AppBasicShare.application.registerActivityLifecycleCallbacks(callback)
     }
 
     private fun getProcessCategory(pid: Int) = CATEGORY_OTHER_PROCESS.plus(":$pid")
@@ -113,20 +112,20 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         categories.forEach {
             intentFilter.addCategory(it)
         }
-        ctx().registerReceiver(mActivityProcessReceiver, intentFilter, BROADCAST_PERMISSIONS, null)
+        AppBasicShare.context.registerReceiver(mActivityProcessReceiver, intentFilter, BROADCAST_PERMISSIONS, null)
     }
 
     private fun loadActivityInfo() {
         thread {
-            libD("loadActivityInfo: ${ctx().packageName} $sysPkgMgr")
+           logD("loadActivityInfo: ${AppBasicShare.context.packageName} $sysPkgMgr", this)
             val packageInfo =
-                sysPkgMgr?.getPackageInfo(ctx().packageName, PackageManager.GET_ACTIVITIES)
+                sysPkgMgr?.getPackageInfo(AppBasicShare.context.packageName, PackageManager.GET_ACTIVITIES)
             if (null == packageInfo) {
-                libE("loadActivityInfo FAIL!")
+               logE("loadActivityInfo FAIL!", loggable = this)
                 return@thread
             }
             val list = packageInfo.activities.filterNotNull()
-            libD("loadActivityInfo: ${list.size}")
+           logD("loadActivityInfo: ${list.size}")
             activityStack.updateActivityInfo(list)
         }
     }
@@ -175,7 +174,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         if (!isMainProcess) {
             return
         }
-        libD("enableForcedStackTopMode: $flag - $isForcedStackTopMode")
+       logD("enableForcedStackTopMode: $flag - $isForcedStackTopMode", this)
         if (flag == isForcedStackTopMode) {
             return
         }
@@ -214,7 +213,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     fun finishForceGoBack(act: Activity) {
         val targetActInfo = activityStack.findTargetByActivity(act)
         if (null == targetActInfo) {
-            libW("finishForceGoBack: not found this act in ActStack!")
+           logW("finishForceGoBack: not found this act in ActStack!", loggable = this)
             act.finish()
             return
         }
@@ -242,12 +241,12 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     private fun internalFinishForceGoBack(targetActInfo: ActInfo) {
         val allActs = activityStack.all()
         if (allActs.isNullOrEmpty()) {
-            libW("finishForceGoBack: ActStack is empty!")
+           logW("finishForceGoBack: ActStack is empty!", this)
             return
         }
         val targetIndex = allActs.indexOfFirst { it.identifier == targetActInfo.identifier }
         if (targetIndex == -1) {
-            libW("finishForceGoBack: not found index for this act!")
+           logW("finishForceGoBack: not found index for this act!", this)
             return
         }
         if (targetIndex == 0) {
@@ -255,10 +254,10 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         }
         val preActInfo = allActs.getOrNull(targetIndex - 1)
         if (null == preActInfo) {
-            libW("finishForceGoBack: not found pre act!")
+           logW("finishForceGoBack: not found pre act!", this)
             return
         }
-        libD("finishForceGoBack: ${targetActInfo.tag} -> ${preActInfo.tag}")
+       logD("finishForceGoBack: ${targetActInfo.tag} -> ${preActInfo.tag}", this)
         if (preActInfo.taskID != targetActInfo.taskID) {
             sysActMgr?.moveTaskToFront(preActInfo.taskID, ActivityManager.MOVE_TASK_WITH_HOME)
         }
@@ -270,7 +269,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     fun finishAndOpenPreTask(act: Activity, flag: Int = ActivityManager.MOVE_TASK_WITH_HOME) {
         val targetActInfo = activityStack.findTargetByActivity(act)
         if (null == targetActInfo) {
-            libW("finishAndOpenPreTask: not found this act in ActStack!")
+           logW("finishAndOpenPreTask: not found this act in ActStack!", this)
             act.finish()
             return
         }
@@ -302,12 +301,12 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     private fun internalFinishAndOpenPreTask(targetActInfo: ActInfo, flag: Int) {
         val allActs = activityStack.all()
         if (allActs.isNullOrEmpty()) {
-            libW("finishAndOpenPreTask: ActStack is empty!")
+           logW("finishAndOpenPreTask: ActStack is empty!", this)
             return
         }
         val targetIndex = allActs.indexOfFirst { it.identifier == targetActInfo.identifier }
         if (targetIndex == -1) {
-            libW("finishAndOpenPreTask: not found index for this act!")
+           logW("finishAndOpenPreTask: not found index for this act!", this)
             return
         }
         if (targetIndex == 0) {
@@ -316,17 +315,17 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
         val preTaskID =
             allActs.subList(0, targetIndex).findLast { it.taskID != targetActInfo.taskID }?.taskID
         if (null == preTaskID) {
-            libW("finishAndOpenPreTask: not found pre task id!")
+           logW("finishAndOpenPreTask: not found pre task id!", this)
             return
         }
-        libD("finishAndOpenPreTask: found pre task id $preTaskID")
+       logD("finishAndOpenPreTask: found pre task id $preTaskID", this)
         sysActMgr?.moveTaskToFront(preTaskID, flag)
     }
 
     private val mActivityProcessReceiver by lazy {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                libD("onReceive[${intent?.action}]: ${context.memoryId} - ${intent?.categories}")
+               logD("onReceive[${intent?.action}]: ${context.memoryId} - ${intent?.categories}", this)
                 if (null == intent) {
                     return
                 }
@@ -346,7 +345,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                         }
                     }
                 } else if (intent.hasCategory(CATEGORY_OTHER_PROCESS)
-                    || intent.hasCategory(getProcessCategory(mProcessID))
+                    || intent.hasCategory(getProcessCategory(AppBasicShare.pid))
                 ) {
                     when (intent.action) {
                         ACTION_KILL_ALL_ACT -> {
@@ -354,7 +353,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                         }
                         ACTION_FINISH_TARGET_ACT -> {
                             val targetActInfo = activityStack.findTargetByIntent(intent)
-                            libD("onReceive[${intent.action}]: ${targetActInfo?.tag}")
+                           logD("onReceive[${intent.action}]: ${targetActInfo?.tag}", this)
                             targetActInfo?.kill()
                         }
                     }
@@ -366,18 +365,18 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     private fun updateFromProcess(intent: Intent) {
         val pid = intent.getActPid()
         if (pid == -1) {
-            libW("updateFromProcess: pid invalid!")
+           logW("updateFromProcess: pid invalid!", this)
             return
         }
         val actInfo = activityStack.updateByIntent(intent)
-        libD("updateFromProcess[${intent.getActStatus()}]: ${intent.tag} $pid $actInfo")
+       logD("updateFromProcess[${intent.getActStatus()}]: ${intent.tag} $pid $actInfo", this)
         checkForeground(intent.getActStatus(), intent.getActivityIsChangingConfigurations())
         activityStack.cleanup()
     }
 
     private fun updateAct(act: Activity, status: ActStatus) {
         val actInfo = activityStack.update(act, status)
-        libD("updateAct[$status]: ${act.tag} $actInfo")
+       logD("updateAct[$status]: ${act.tag} $actInfo", this)
         if (!isMainProcess && null != actInfo) {
             val intent = Intent(ACTION_UPDATE_ACT_INFO)
             intent.addCategory(CATEGORY_MAIN_PROCESS)
@@ -390,8 +389,8 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
     }
 
     private fun send(intent: Intent) {
-        libD("send: $isMainProcess $mProcessID ${intent.action} ${intent.categories}")
-        ctx().sendBroadcast(intent, BROADCAST_PERMISSIONS)
+       logD("send: $isMainProcess ${AppBasicShare.pid} ${intent.action} ${intent.categories}", this)
+        AppBasicShare.context.sendBroadcast(intent, BROADCAST_PERMISSIONS)
     }
 
     private val callback = object : Application.ActivityLifecycleCallbacks {
@@ -450,7 +449,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                 }
                 if (++mInStackActCount == 1) {
                     val topActInfo = activityStack.topActInfo
-                    libD("enter FG: ${topActInfo?.tag} $isForcedStackTopMode $mLastTaskId")
+                   logD("enter FG: ${topActInfo?.tag} $isForcedStackTopMode $mLastTaskId", this)
                     thread {
                         events.toList().forEach {
                             it.onForegroundStateChange(true)
@@ -474,7 +473,7 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>() {
                 }
                 if (--mInStackActCount == 0) {
                     val topActInfo = activityStack.topActInfo
-                    libD("enter BG: ${topActInfo?.tag} $isForcedStackTopMode $mLastTaskId")
+                   logD("enter BG: ${topActInfo?.tag} $isForcedStackTopMode $mLastTaskId", this)
                     thread {
                         events.toList().forEach {
                             it.onForegroundStateChange(false)

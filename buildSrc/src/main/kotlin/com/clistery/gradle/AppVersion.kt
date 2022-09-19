@@ -5,20 +5,15 @@ package com.clistery.gradle
 object AppVersion {
 
     object clistery{
-        const val appbasic = "1.0.1"
-        const val appinject = "1.4.5"
+        const val appbasic = "2.3.0"
+        const val appinject = "1.7.0"
     }
 
     object kotlin {
         
-        const val version = "1.5.0"
+        const val version = "1.7.10"
     }
-    
-    object dokka {
-        
-        const val version = "1.4.32"
-    }
-    
+
     object androidx {
         
         const val coreKtx = "1.3.1"

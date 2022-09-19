@@ -3,9 +3,9 @@ package com.yh.actmanager.internal
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import com.kotlin.memoryId
 import com.yh.actmanager.ActManager
-import com.yh.appbasic.ext.memoryId
-import com.yh.appbasic.logger.ext.libD
+import com.yh.appbasic.logger.logD
 
 internal class ActivityStack {
 
@@ -66,7 +66,7 @@ internal class ActivityStack {
             }
             it.status == ActStatus.DESTROYED
         }
-        ActManager.get().libD("cleanup: ${actInfoList.map { "[${it.status}]${it.tag}" }}")
+        logD("cleanup: ${actInfoList.map { "[${it.status}]${it.tag}" }}", loggable = ActManager.get())
     }
 
     fun findTargetByIntent(intent: Intent): ActInfo? {

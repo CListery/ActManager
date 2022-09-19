@@ -1,0 +1,25 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.yh.actmanager////PointingToDeclaration/lib_actmanager/com.yh.actmanager/index.html
+$dokka.location:com.yh.actmanager/ActManager.Companion///PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/-companion/index.html
+$dokka.location:com.yh.actmanager/ActManager.Companion/get/#/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/-companion/get.html
+$dokka.location:com.yh.actmanager/ActManager///PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/index.html
+$dokka.location:com.yh.actmanager/ActManager/enableForcedStackTopMode/#kotlin.Boolean/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/enable-forced-stack-top-mode.html
+$dokka.location:com.yh.actmanager/ActManager/finishAndOpenPreTask/#android.app.Activity#kotlin.Int/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/finish-and-open-pre-task.html
+$dokka.location:com.yh.actmanager/ActManager/finishForceGoBack/#android.app.Activity/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/finish-force-go-back.html
+$dokka.location:com.yh.actmanager/ActManager/isForeground/#/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/is-foreground.html
+$dokka.location:com.yh.actmanager/ActManager/killAll/#/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/kill-all.html
+$dokka.location:com.yh.actmanager/ActManager/killAllByProcess/#/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/kill-all-by-process.html
+$dokka.location:com.yh.actmanager/ActManager/onCreateLogOwner/#com.yh.appbasic.logger.LogOwner/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/on-create-log-owner.html
+$dokka.location:com.yh.actmanager/ActManager/registerEvent/#com.yh.actmanager.IForegroundEvent/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/register-event.html
+$dokka.location:com.yh.actmanager/ActManager/topAct/#/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/top-act.html
+$dokka.location:com.yh.actmanager/ActManager/unregisterEvent/#com.yh.actmanager.IForegroundEvent/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-act-manager/unregister-event.html
+$dokka.location:com.yh.actmanager/IActStatusEvent///PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-act-status-event/index.html
+$dokka.location:com.yh.actmanager/IActStatusEvent/onCreate/#android.app.Activity/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-act-status-event/on-create.html
+$dokka.location:com.yh.actmanager/IActStatusEvent/onDestroyed/#android.app.Activity/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-act-status-event/on-destroyed.html
+$dokka.location:com.yh.actmanager/IActStatusEvent/onHide/#android.app.Activity/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-act-status-event/on-hide.html
+$dokka.location:com.yh.actmanager/IActStatusEvent/onShow/#android.app.Activity/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-act-status-event/on-show.html
+$dokka.location:com.yh.actmanager/IForegroundEvent///PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-foreground-event/index.html
+$dokka.location:com.yh.actmanager/IForegroundEvent/onForegroundStateChange/#kotlin.Boolean/PointingToDeclaration/lib_actmanager/com.yh.actmanager/-i-foreground-event/on-foreground-state-change.html
+com.yh.actmanager
+

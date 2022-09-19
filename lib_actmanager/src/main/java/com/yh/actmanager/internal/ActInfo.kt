@@ -1,11 +1,11 @@
 package com.yh.actmanager.internal
 
 import android.app.Activity
+import android.app.isInvalid
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Process
-import com.yh.actmanager.ext.isInvalid
-import com.yh.appbasic.ext.memoryId
+import com.kotlin.memoryId
 import java.lang.ref.WeakReference
 
 /**
