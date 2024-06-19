@@ -203,6 +203,15 @@ class ActManager private constructor() : InjectHelper<IBaseAppInject>(), ILogger
     }
 
     /**
+     * 关闭指定进程的所有 activity
+     */
+    fun killByProcess(pid: Int) {
+        val intent = Intent(ACTION_KILL_ALL_ACT)
+        intent.addCategory(getProcessCategory(pid))
+        send(intent)
+    }
+
+    /**
      * 获取当前进程的栈顶 activity
      */
     val topAct get() = activityStack.topAct
